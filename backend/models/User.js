@@ -7,4 +7,4 @@ const userSchema = new mongoose.Schema({
   password: { type: String, required: true },
 });
 
-module.exports = mongoose.model("Student", userSchema, "registerDetails");
+module.exports = mongoose.model("TimaAcademy", userSchema, "registerDetails");
