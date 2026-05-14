@@ -30,13 +30,15 @@ export default function RootLayout({
       >
         <header className="gradient-bg">
           <div className="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-            <Link href="/" className="font-semibold gradient-text text-xl">EduCommerce</Link>
+            <Link href="/" className="font-semibold gradient-text text-xl">Tima Academy</Link>
             <nav className="nav text-sm">
               <Link href="/courses">Courses</Link>
-              <Link href="/pricing">Pricing</Link>
               <Link href="/about">About</Link>
+              <Link href="/register">Register</Link>
+              <Link href="/login">Login</Link>
               <Link href="/contact">Contact</Link>
-              <Link href="/cart">Cart</Link>
+              <Link href="/cart">Wishlist</Link>
+
             </nav>
           </div>
         </header>
@@ -45,7 +47,7 @@ export default function RootLayout({
         </main>
         <footer className="gradient-bg">
           <div className="max-w-4xl mx-auto px-4 py-6 text-sm flex items-center justify-between">
-            <p className="muted">© {new Date().getFullYear()} EduCommerce</p>
+            <p className="muted">© {new Date().getFullYear()} Tima Academy</p>
             <div className="flex items-center gap-4">
               <Link href="/privacy" className="hover:underline">Privacy</Link>
               <Link href="/terms" className="hover:underline">Terms</Link>

@@ -1,70 +1,101 @@
-import Link from "next/link";
+"use client";
 
-type CourseData = {
-  title: string;
-  summary: string;
-  syllabus: string[];
-  price: number;
+import { useEffect, useState } from "react";
+import { useParams } from "next/navigation";
+
+type Video = {
+  id: string;
+  coursename: string;
+  videonumber: number;
+  videolink: string;
+  description: string;
 };
 
-const COURSES: Record<string, CourseData> = {
-  "math-foundations": {
-    title: "Math Foundations",
-    summary: "Algebra, geometry, and problem solving from basics to intermediate.",
-    syllabus: ["Numbers & Operations", "Algebra Basics", "Geometry Essentials", "Word Problems"],
-    price: 19,
-  },
-  "science-essentials": {
-    title: "Science Essentials",
-    summary: "Core physics, chemistry, and biology explained simply.",
-    syllabus: ["Mechanics", "Chemical Reactions", "Cells & Systems", "Labs & Safety"],
-    price: 39,
-  },
-  "exam-prep": {
-    title: "Exam Prep",
-    summary: "Targeted practice, strategies, and mock tests to boost scores.",
-    syllabus: ["Time Management", "Question Strategies", "Mock Tests", "Review & Feedback"],
-    price: 49,
-  },
-};
+export default function CourseDetailsPage() {
+  const { slug } = useParams();
+  const [videos, setVideos] = useState<Video[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-export default function CourseDetailPage({ params }: { params: { slug: string } }) {
-  const course = COURSES[params.slug];
+  // Convert slug back to actual course name (replace dashes with spaces)
+  const coursename = String(slug).replace(/-/g, " ");
 
-  if (!course) {
-    return (
-      <div className="space-y-4">
-        <h1 className="text-2xl font-semibold">Course not found</h1>
-        <p className="opacity-80">The course you are looking for does not exist.</p>
-        <Link className="underline" href="/courses">Back to courses</Link>
-      </div>
-    );
-  }
+  useEffect(() => {
+    const fetchVideos = async () => {
+      try {
+        // Encode the course name to avoid spaces breaking the URL
+        const response = await fetch(
+          `http://localhost:3001/courses/${encodeURIComponent(coursename)}`
+        );
+
+        // Check if the response is JSON
+        const contentType = response.headers.get("content-type");
+        if (!contentType || !contentType.includes("application/json")) {
+          throw new Error(
+            `Expected JSON, but got "${contentType}". Status: ${response.status}`
+          );
+        }
+
+        const data = await response.json();
+
+        if (!data.success) {
+          setError(data.message || "No videos found for this course.");
+          setVideos([]);
+        } else {
+          // Map to frontend format
+          const formatted: Video[] = data.videos.map((v: any) => ({
+            id: v._id,
+            coursename: v.coursename,
+            videonumber: v.videonumber,
+            videolink: v.videolink,
+            description: v.description,
+          }));
+
+          setVideos(formatted);
+        }
+      } catch (err: any) {
+        console.error("Error fetching course details:", err);
+        setError(err.message || "An unexpected error occurred.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchVideos();
+  }, [coursename]);
+
+  if (loading) return <p>Loading course videos...</p>;
+  if (error) return <p className="text-red-600">{error}</p>;
 
   return (
     <div className="space-y-6">
-      <span className="badge">Popular</span>
-      <h1 className="text-3xl font-semibold gradient-text">{course.title}</h1>
-      <p className="muted">{course.summary}</p>
+      <h1 className="text-3xl font-bold">{coursename} – Videos</h1>
 
-      <section>
-        <h2 className="font-medium mb-2">Syllabus</h2>
-        <ul className="list-disc pl-5 space-y-1">
-          {course.syllabus.map((topic) => (
-            <li key={topic}>{topic}</li>
+      {videos.length === 0 ? (
+        <p>No videos available for this course.</p>
+      ) : (
+        <ul className="space-y-4">
+          {videos.map((video) => (
+            <li
+              key={video.id}
+              className="p-4 border rounded shadow-sm bg-white"
+            >
+              <h2 className="text-xl font-semibold">Video {video.videonumber}</h2>
+
+              <p className="text-gray-600 mt-2">{video.description}</p>
+
+              <a
+                href={video.videolink}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-blue-600 underline mt-3 inline-block"
+              >
+                Watch Now
+              </a>
+            </li>
           ))}
         </ul>
-      </section>
-
-      <div className="flex items-center gap-3">
-        <span className="text-lg font-semibold">${course.price}</span>
-        <a href="/cart" className="btn">Add to cart</a>
-        <a href="/checkout" className="btn btn-primary">Buy now</a>
-      </div>
-
-      <Link className="underline text-sm" href="/courses">← Back to all courses</Link>
+      )}
     </div>
   );
 }
-
-

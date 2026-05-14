@@ -1,4 +1,28 @@
+"use client";
+
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import ProtectedRoute from "../components/ProtectedRoute";
+
 export default function CheckoutPage() {
+
+  const router = useRouter();
+
+  useEffect(() => {
+    const isLoggedIn = sessionStorage.getItem("isLoggedIn");
+
+    // 🚫 Redirect to login if not logged in
+    if (!isLoggedIn) {
+      router.push("/login");
+    }
+  }, [router]);
+
+  const handleLogout = () => {
+    sessionStorage.removeItem("isLoggedIn");
+    router.push("/login");
+  };
+
+
   return (
     <div className="space-y-6 max-w-xl">
       <h1 className="text-xl font-semibold">Checkout</h1>

@@ -1,15 +1,33 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [mounted, setMounted] = useState(false);
+  const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+    
+    // Check if already logged in
+    if (typeof window !== "undefined") {
+      const token = sessionStorage.getItem("authToken");
+      if (token) {
+        router.replace("/");
+      }
+    }
+  }, [router]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+    setError("");
 
     try {
       const res = await fetch("http://localhost:3001/login", {
@@ -21,67 +39,116 @@ export default function LoginPage() {
       const data = await res.json();
 
       if (res.ok) {
-        localStorage.setItem("token", data.token);
-        alert("✅ Login successful!");
+        // Store auth data in sessionStorage
+        sessionStorage.setItem("authToken", data.token || "authenticated");
+        sessionStorage.setItem("userEmail", data.user.email);
+        sessionStorage.setItem("isAdmin", data.user.isAdmin ? "true" : "false");
+        sessionStorage.setItem("userName", data.user.name || "");
+        
+        // Force a hard navigation to ensure session is recognized
         window.location.href = "/";
       } else {
-        alert("⚠️ " + data.message);
+        setError(data.message || "Invalid email or password");
       }
-    } catch (error) {
-      console.error(error);
-      alert("❌ Something went wrong. Please try again.");
+    } catch (err) {
+      console.error("Login error:", err);
+      setError("Unable to connect to server. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
+  // Prevent hydration issues
+  if (!mounted) {
+    return null;
+  }
+
   return (
-    <div className="space-y-6 max-w-md mx-auto mt-12">
-      <h1 className="text-3xl font-semibold gradient-text text-center">
-        Welcome back
-      </h1>
-      <p className="text-center text-gray-500">Log in to continue learning.</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Welcome Back 👋
+          </h2>
+          <p className="mt-2 text-gray-600">Log in to continue</p>
+        </div>
 
-      <form className="space-y-3" onSubmit={handleSubmit}>
-        <label className="block">
-          <span className="text-sm">Email</span>
-          <input
-            type="email"
-            className="mt-1 input w-full border border-gray-300 rounded-md px-3 py-2"
-            placeholder="you@example.com"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </label>
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
 
-        <label className="block">
-          <span className="text-sm">Password</span>
-          <input
-            type="password"
-            className="mt-1 input w-full border border-gray-300 rounded-md px-3 py-2"
-            placeholder="••••••••"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </label>
+          <div className="space-y-4">
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email
+              </label>
+              <input
+                id="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                disabled={loading}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition disabled:bg-gray-100"
+                placeholder="you@example.com"
+              />
+            </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btn-primary w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          {loading ? "Logging in..." : "Log in"}
-        </button>
-      </form>
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Password
+              </label>
+              <input
+                id="password"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                disabled={loading}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition disabled:bg-gray-100"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
 
-      <p className="text-sm text-center">
-        New here?{" "}
-        <a href="/register" className="underline text-blue-600">
-          Create an account
-        </a>
-      </p>
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-blue-600 text-black py-3 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            {loading ? (
+              <span className="flex items-center justify-center">
+                <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-black" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
+                  <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Logging in...
+              </span>
+            ) : (
+              "Login"
+            )}
+          </button>
+
+          <p className="text-center text-sm text-gray-600">
+            Don't have an account?{" "}
+            <Link
+              href="/signup"
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Sign up
+            </Link>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }

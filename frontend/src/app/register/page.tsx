@@ -9,7 +9,7 @@ export default function RegisterPage() {
     email: "",
     password: "",
   });
-  
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
   const [loading, setLoading] = useState(false);
@@ -26,7 +26,6 @@ export default function RegisterPage() {
     setSuccess("");
     setLoading(true);
 
-    // Basic validation
     if (!formData.fullName || !formData.email || !formData.password) {
       setError("All fields are required");
       setLoading(false);
@@ -39,7 +38,6 @@ export default function RegisterPage() {
     }
 
     try {
-      // Map frontend name to backend field "fullname"
       const payload = {
         fullname: formData.fullName,
         email: formData.email,
@@ -52,13 +50,10 @@ export default function RegisterPage() {
 
       if (response.data && response.data.success) {
         setSuccess("Account created successfully! Redirecting to login...");
-        // optionally store minimal user info
         localStorage.setItem("user", JSON.stringify(response.data.user || {}));
 
-        // clear form
         setFormData({ fullName: "", email: "", password: "" });
 
-        // redirect to login
         setTimeout(() => {
           window.location.href = "/login";
         }, 1200);
@@ -79,64 +74,107 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="space-y-6 max-w-md mx-auto mt-12">
-      <h1 className="text-3xl font-semibold gradient-text text-center">Create your account</h1>
-      <p className="text-center text-gray-500">Join Tima Academy and start learning today.</p>
+    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100 px-4">
+      <div className="max-w-md w-full space-y-8 bg-white p-8 rounded-2xl shadow-xl">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900">
+            Create your account ✨
+          </h2>
+          <p className="mt-2 text-gray-600">
+            Join Tima Academy and start learning
+          </p>
+        </div>
 
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded">{error}</div>}
-      {success && <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded">{success}</div>}
+        <form onSubmit={handleSubmit} className="mt-8 space-y-6">
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">
+              {error}
+            </div>
+          )}
 
-      <form className="space-y-3" onSubmit={handleSubmit}>
-        <label className="block">
-          <span className="text-sm">Full name</span>
-          <input
-            name="fullName"
-            className="mt-1 input w-full border border-gray-300 rounded-md px-3 py-2"
-            placeholder="Jane Doe"
-            value={formData.fullName}
-            onChange={handleChange}
+          {success && (
+            <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-lg text-sm">
+              {success}
+            </div>
+          )}
+
+          <div className="space-y-4">
+            <div>
+              <label
+                htmlFor="fullName"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Full Name
+              </label>
+              <input
+                name="fullName"
+                id="fullName"
+                value={formData.fullName}
+                onChange={handleChange}
+                disabled={loading}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition disabled:bg-gray-100"
+                placeholder="Jane Doe"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="email"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Email
+              </label>
+              <input
+                name="email"
+                id="email"
+                type="email"
+                value={formData.email}
+                onChange={handleChange}
+                disabled={loading}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition disabled:bg-gray-100"
+                placeholder="you@example.com"
+              />
+            </div>
+
+            <div>
+              <label
+                htmlFor="password"
+                className="block text-sm font-medium text-gray-700 mb-1"
+              >
+                Password
+              </label>
+              <input
+                name="password"
+                id="password"
+                type="password"
+                value={formData.password}
+                onChange={handleChange}
+                disabled={loading}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent transition disabled:bg-gray-100"
+                placeholder="••••••••"
+              />
+            </div>
+          </div>
+
+          <button
+            type="submit"
             disabled={loading}
-          />
-        </label>
+            className="w-full bg-blue-600 text-black py-3 rounded-lg font-semibold hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed transition"
+          >
+            {loading ? "Creating account..." : "Create account"}
+          </button>
 
-        <label className="block">
-          <span className="text-sm">Email</span>
-          <input
-            name="email"
-            type="email"
-            className="mt-1 input w-full border border-gray-300 rounded-md px-3 py-2"
-            placeholder="you@example.com"
-            value={formData.email}
-            onChange={handleChange}
-            disabled={loading}
-          />
-        </label>
-
-        <label className="block">
-          <span className="text-sm">Password</span>
-          <input
-            name="password"
-            type="password"
-            className="mt-1 input w-full border border-gray-300 rounded-md px-3 py-2"
-            placeholder="••••••••"
-            value={formData.password}
-            onChange={handleChange}
-            disabled={loading}
-          />
-        </label>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="btn btn-primary w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition"
-        >
-          {loading ? "Creating account..." : "Create account"}
-        </button>
-      </form>
-
-      <p className="text-sm text-center">
-        Already have an account? <a href="/login" className="underline text-blue-600">Log in</a>
-      </p>
+          <p className="text-center text-sm text-gray-600">
+            Already have an account?{" "}
+            <a
+              href="/login"
+              className="font-medium text-blue-600 hover:text-blue-500"
+            >
+              Log in
+            </a>
+          </p>
+        </form>
+      </div>
     </div>
   );
 }
