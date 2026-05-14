@@ -1,0 +1,55 @@
+{
+  "pages": {
+    "/courses/page": [
+      "static/chunks/97cff_next_dist_dbe19a33._.js",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_src_app_favicon_ico_mjs_3b6a1619._.js",
+      "static/chunks/97cff_next_dist_ff377a42._.js",
+      "static/chunks/[root-of-the-server]__c59658ea._.css",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_src_app_layout_tsx_c43334ce._.js",
+      "static/chunks/97cff_next_dist_client_components_builtin_global-error_48a7a958.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_871ab792._.js",
+      "static/chunks/97cff_next_dist_compiled_react-dom_6c630613._.js",
+      "static/chunks/97cff_next_dist_compiled_next-devtools_index_007ad078.js",
+      "static/chunks/97cff_next_dist_compiled_97492f8d._.js",
+      "static/chunks/97cff_next_dist_client_8434e7dd._.js",
+      "static/chunks/97cff_next_dist_b99e792f._.js",
+      "static/chunks/97cff_@swc_helpers_cjs_693e7fdf._.js",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_a0ff3932._.js",
+      "static/chunks/turbopack-Desktop_New folder (2)_TIma-Academy_1d83a9a7._.js"
+    ],
+    "/page": [
+      "static/chunks/97cff_next_dist_dbe19a33._.js",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_src_app_favicon_ico_mjs_3b6a1619._.js",
+      "static/chunks/97cff_next_dist_ff377a42._.js",
+      "static/chunks/[root-of-the-server]__c59658ea._.css",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_src_app_layout_tsx_c43334ce._.js",
+      "static/chunks/97cff_next_dist_client_components_builtin_global-error_48a7a958.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_871ab792._.js",
+      "static/chunks/97cff_next_dist_compiled_react-dom_6c630613._.js",
+      "static/chunks/97cff_next_dist_compiled_next-devtools_index_007ad078.js",
+      "static/chunks/97cff_next_dist_compiled_97492f8d._.js",
+      "static/chunks/97cff_next_dist_client_8434e7dd._.js",
+      "static/chunks/97cff_next_dist_b99e792f._.js",
+      "static/chunks/97cff_@swc_helpers_cjs_693e7fdf._.js",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_a0ff3932._.js",
+      "static/chunks/turbopack-Desktop_New folder (2)_TIma-Academy_1d83a9a7._.js"
+    ],
+    "/pricing/page": [
+      "static/chunks/97cff_next_dist_dbe19a33._.js",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_src_app_favicon_ico_mjs_3b6a1619._.js",
+      "static/chunks/97cff_next_dist_ff377a42._.js",
+      "static/chunks/[root-of-the-server]__c59658ea._.css",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_src_app_layout_tsx_c43334ce._.js",
+      "static/chunks/97cff_next_dist_client_components_builtin_global-error_48a7a958.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_871ab792._.js",
+      "static/chunks/97cff_next_dist_compiled_react-dom_6c630613._.js",
+      "static/chunks/97cff_next_dist_compiled_next-devtools_index_007ad078.js",
+      "static/chunks/97cff_next_dist_compiled_97492f8d._.js",
+      "static/chunks/97cff_next_dist_client_8434e7dd._.js",
+      "static/chunks/97cff_next_dist_b99e792f._.js",
+      "static/chunks/97cff_@swc_helpers_cjs_693e7fdf._.js",
+      "static/chunks/Desktop_New folder (2)_TIma-Academy_a0ff3932._.js",
+      "static/chunks/turbopack-Desktop_New folder (2)_TIma-Academy_1d83a9a7._.js"
+    ]
+  }
+}
